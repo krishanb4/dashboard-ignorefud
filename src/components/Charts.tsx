@@ -11,8 +11,12 @@ const ChartCard = ({ children }: { children: React.ReactNode }) => (
 );
 
 const ExampleCharts = () => {
-  const [tokenData, setTokenData] = useState([]);
-
+  const [tokenData, setTokenData] = useState(0);
+  const [tokenBurnData, setTokenBurnData] = useState(0);
+  const [tokenBurnDataAuto, setTokenBurnDataAuto] = useState(0);
+  const [dataCategories, setDataCategories] = useState<string[]>([]);
+  const [autoburnData, setautoburnData] = useState<string[]>([]);
+  const [manualBurnDatanew, setmanualBurnData] = useState<string[]>([]);
   useEffect(() => {
     function getTokenData() {
       axios
@@ -20,8 +24,32 @@ const ExampleCharts = () => {
           "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/burn"
         )
         .then((response) => {
-          setTokenData(response.data);
-          console.log(`data: ${response.data}`); // the response data from the server
+          setTokenData(response.data["burnData"]["currentSupply"]);
+          setTokenBurnData(response.data["burnData"]["manualBurn"]);
+          setTokenBurnDataAuto(response.data["burnData"]["autoBurn"]);
+          const autoBurns = response.data["burnData"]["autoBurns"];
+          console.log(autoBurns);
+
+          const manualBurns = response.data["burnData"]["manualBurns"];
+          const categories = autoBurns.map((item: { date: string }) =>
+            new Date(item.date).toLocaleDateString()
+          );
+          setDataCategories(categories);
+          const autoBurndata = autoBurns.map(
+            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
+          );
+          setautoburnData(autoBurndata);
+          const autoBurnLength = autoBurndata.length;
+          const manualBurnData = manualBurns.map(
+            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
+          );
+          const manualBurnLength = manualBurnData.length;
+          const dataShort = autoBurnLength - manualBurnLength;
+          const lastManualBurnValue = manualBurnData.pop();
+          for (let i = 0; i < dataShort; i++) {
+            manualBurnData.push(lastManualBurnValue);
+          }
+          setmanualBurnData(manualBurnData);
         })
         .catch((error) => {
           console.error(error); // handle error
@@ -29,24 +57,16 @@ const ExampleCharts = () => {
     }
     getTokenData();
   }, []);
-  const autoBurns = Object.values(tokenData)[0]["autoBurns"] as any[];
-  const manualBurns = Object.values(tokenData)[0]["manualBurns"] as any[];
+  console.log(Object.values(tokenData)[0]);
 
-  const categories = autoBurns.map((item) =>
-    new Date(item.date).toLocaleDateString()
-  );
-  const autoBurndata = autoBurns.map((item) => item.cumulative_sum.toFixed(0));
-  const autoBurnLength = autoBurndata.length;
-  const manualBurnData = manualBurns.map((item) =>
-    item.cumulative_sum.toFixed(0)
-  );
-  const manualBurnLength = manualBurnData.length;
-  const dataShort = autoBurnLength - manualBurnLength;
-  const lastManualBurnValue = manualBurnData.pop();
-  for (let i = 0; i < dataShort; i++) {
-    manualBurnData.push(lastManualBurnValue);
-  }
   const options = {
+    tooltip: {
+      theme: "dark",
+      style: {
+        background: "#1a1a1a",
+        foreColor: "#e6e6e6",
+      },
+    },
     xaxis: {
       categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       labels: {
@@ -64,8 +84,15 @@ const ExampleCharts = () => {
     },
   };
   const options4 = {
+    tooltip: {
+      theme: "dark",
+      style: {
+        background: "#1a1a1a",
+        foreColor: "#e6e6e6",
+      },
+    },
     xaxis: {
-      categories: categories,
+      categories: dataCategories,
       labels: {
         style: {
           colors: "#34545f",
@@ -101,11 +128,11 @@ const ExampleCharts = () => {
   const series4 = [
     {
       name: "manual-burn",
-      data: manualBurnData,
+      data: manualBurnDatanew,
     },
     {
       name: "auto-burn",
-      data: autoBurndata,
+      data: autoburnData,
     },
   ];
   return (
@@ -118,13 +145,11 @@ const ExampleCharts = () => {
                 4TOKEN
               </h2>
             </div>
-            <div className="flex flex-col justify-between flex-grow text-center">
+            <div className="flex flex-col text-black dark:text-white justify-between flex-grow text-center">
               <ul>
                 <li>
                   Current Supply :{" "}
-                  {numeral(Object.values(tokenData)[0]["currentSupply"])
-                    .format("0.0a")
-                    .toUpperCase()}
+                  {numeral(tokenData).format("0.0a").toUpperCase()}
                 </li>
                 <li>Price : $0.0007336</li>
               </ul>
@@ -159,10 +184,7 @@ const ExampleCharts = () => {
             </div>
             <div className="flex flex-col justify-between flex-grow text-center">
               <p className="leading-relaxed text-base text-black dark:text-white">
-                {numeral(
-                  Object.values(tokenData)[0]["manualBurn"] +
-                    Object.values(tokenData)[0]["autoBurn"]
-                )
+                {numeral(tokenBurnData + tokenBurnDataAuto)
                   .format("0.0a")
                   .toUpperCase()}
               </p>
@@ -193,7 +215,7 @@ const ExampleCharts = () => {
                 ArcherSwap
               </h2>
             </div>
-            <div className="flex flex-col justify-between ttext-black dark:text-white flex-grow text-center">
+            <div className="flex flex-col justify-between text-black dark:text-white flex-grow text-center">
               <ul>
                 <li>Price : $0.0007336</li>
                 <li>Liquidity : $539.05K</li>
@@ -228,16 +250,11 @@ const ExampleCharts = () => {
             <div className="flex flex-col justify-between text-black dark:text-white flex-grow text-center">
               <ul>
                 <li>
-                  Manual :{" "}
-                  {numeral(Object.values(tokenData)[0]["manualBurn"])
-                    .format("0.0a")
-                    .toUpperCase()}
+                  Manual : {numeral(tokenBurnData).format("0.0a").toUpperCase()}
                 </li>
                 <li>
                   Auto :{" "}
-                  {numeral(Object.values(tokenData)[0]["autoBurn"])
-                    .format("0.0a")
-                    .toUpperCase()}
+                  {numeral(tokenBurnDataAuto).format("0.0a").toUpperCase()}
                 </li>
               </ul>
             </div>
