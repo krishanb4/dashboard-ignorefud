@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import MainNetwork from "@/components/MainNetwork";
+
 import { useState, useEffect, useRef } from "react";
-import MobileNetworks from "./MobileNetworks";
+
 import { Web3Button } from "@web3modal/react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
-import Transactions from "./Transactions";
 
 const Header: React.FC = () => {
   return (
