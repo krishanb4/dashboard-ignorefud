@@ -15,12 +15,12 @@ const ExampleCharts = () => {
   const [tokenBurnData, setTokenBurnData] = useState(0);
   const [tokenBurnDataAuto, setTokenBurnDataAuto] = useState(0);
   const [dataCategories, setDataCategories] = useState<string[]>([]);
-  const [autoburnData, setautoburnData] = useState<string[]>([]);
-  const [manualBurnDatanew, setmanualBurnData] = useState<string[]>([]);
+  const [autoburnData, setautoburnData] = useState([]);
+  const [manualBurnDatanew, setmanualBurnData] = useState([]);
   useEffect(() => {
     function getTokenData() {
       axios
-        .get(
+        .post(
           "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/burn"
         )
         .then((response) => {
@@ -62,10 +62,6 @@ const ExampleCharts = () => {
   const options = {
     tooltip: {
       theme: "dark",
-      style: {
-        background: "#1a1a1a",
-        foreColor: "#e6e6e6",
-      },
     },
     xaxis: {
       categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -86,10 +82,6 @@ const ExampleCharts = () => {
   const options4 = {
     tooltip: {
       theme: "dark",
-      style: {
-        background: "#1a1a1a",
-        foreColor: "#e6e6e6",
-      },
     },
     xaxis: {
       categories: dataCategories,
