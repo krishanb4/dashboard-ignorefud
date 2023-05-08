@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import Theme from "@/components/Theme";
 import SelectButtons from "@/components/SelectButtons";
+import StakingCards from "@/components/StakingCard";
 
 export default function Home() {
   return (
@@ -14,7 +15,6 @@ export default function Home() {
       </Head>
       <Header />
       <SelectButtons />
-      {/* <Swap /> */}
       <Theme />
     </>
   );

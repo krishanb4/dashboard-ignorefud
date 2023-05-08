@@ -72,6 +72,7 @@ function Theme() {
     darkQuery.removeEventListener("change", onChange);
     darkQuery.addEventListener("change", onChange);
   }
+  console.log(theme);
 
   return (
     <>
@@ -81,7 +82,7 @@ function Theme() {
             key={text}
             onClick={() => setTheme(text)}
             className={`w-8 h-8 leading-9 text-xl rounded-full m-1 ${
-              theme === text && "text-sky-600"
+              theme == text ? "text-sky-600" : ""
             }`}
           >
             <Icon />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Charts from "./Charts";
+import StakingCards from "./StakingCard";
 
 const SelectButtons: React.FC = () => {
   const [selectedButton, setSelectButton] = useState("Dashboard");
@@ -39,7 +40,14 @@ const SelectButtons: React.FC = () => {
           </nav>
         </div>
       </div>
-      {selectedButton == "Dashboard" ? <Charts /> : ""}
+      {selectedButton == "Dashboard" ? (
+        <Charts />
+      ) : selectedButton == "Staking" ? (
+        <StakingCards />
+      ) : (
+        ""
+      )}
+      {}
     </>
   );
 };
