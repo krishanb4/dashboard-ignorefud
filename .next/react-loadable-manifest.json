@@ -1,45 +1,38 @@
 {
   "../../node_modules/@wagmi/connectors/dist/walletConnect.js -> @walletconnect/ethereum-provider": {
-    "id": 5173,
+    "id": "../../node_modules/@wagmi/connectors/dist/walletConnect.js -> @walletconnect/ethereum-provider",
     "files": [
-      "static/chunks/955.6b53a8601233ea3b.js",
-      "static/chunks/173.00270bfec55c0049.js",
-      "static/chunks/883.a6a890ce5b31882f.js"
+      "static/chunks/node_modules_walletconnect_ethereum-provider_dist_index_es_js.js"
     ]
   },
   "../../node_modules/@wagmi/connectors/dist/walletConnectLegacy.js -> @walletconnect/legacy-provider": {
-    "id": 7749,
+    "id": "../../node_modules/@wagmi/connectors/dist/walletConnectLegacy.js -> @walletconnect/legacy-provider",
     "files": [
-      "static/chunks/592.287a70f026ab1a21.js",
-      "static/chunks/955.6b53a8601233ea3b.js",
-      "static/chunks/749.58e9f83d910cd8af.js"
+      "static/chunks/node_modules_walletconnect_legacy-provider_dist_esm_index_js.js"
     ]
   },
   "../../node_modules/@walletconnect/ethereum-provider/dist/index.es.js -> @web3modal/standalone": {
-    "id": 6648,
+    "id": "../../node_modules/@walletconnect/ethereum-provider/dist/index.es.js -> @web3modal/standalone",
     "files": [
-      "static/chunks/648.be081484db1b1673.js"
+      "static/chunks/node_modules_web3modal_standalone_dist_index_js.js"
     ]
   },
   "../../node_modules/@web3modal/react/dist/index.js -> @web3modal/ui": {
-    "id": 7251,
+    "id": "../../node_modules/@web3modal/react/dist/index.js -> @web3modal/ui",
     "files": [
-      "static/chunks/592.287a70f026ab1a21.js",
-      "static/chunks/251.227410fd594aaf16.js"
+      "static/chunks/node_modules_web3modal_ui_dist_index_js.js"
     ]
   },
   "../../node_modules/@web3modal/standalone/dist/index.js -> @web3modal/ui": {
-    "id": 7251,
+    "id": "../../node_modules/@web3modal/standalone/dist/index.js -> @web3modal/ui",
     "files": [
-      "static/chunks/592.287a70f026ab1a21.js",
-      "static/chunks/251.227410fd594aaf16.js"
+      "static/chunks/node_modules_web3modal_ui_dist_index_js.js"
     ]
   },
   "../components/Charts.tsx -> react-apexcharts": {
-    "id": 7229,
+    "id": "../components/Charts.tsx -> react-apexcharts",
     "files": [
-      "static/chunks/6c44d60f.f0e86522a3ddd51c.js",
-      "static/chunks/229.e2af736d503f1927.js"
+      "static/chunks/node_modules_react-apexcharts_dist_react-apexcharts_min_js.js"
     ]
   }
 }

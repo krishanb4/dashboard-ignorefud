@@ -257,19 +257,23 @@ const ExampleCharts = () => {
       <div className="flex sm:grid-cols-2 justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="border-2 dark:border-black  border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
-            <p className="text-center dark:text-white">4TOKEN Price</p>
+            <p className="text-center text-black dark:text-white">
+              4TOKEN Price
+            </p>
             <Chart options={options} series={series1} type="area" />
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
-            <p className="text-center dark:text-white">Liquidity</p>
+            <p className="text-center text-black dark:text-white">Liquidity</p>
             <Chart options={options} series={series2} type="area" />
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
-            <p className="text-center dark:text-white">USDT Rewards</p>
+            <p className="text-center text-black dark:text-white">
+              USDT Rewards
+            </p>
             <Chart options={options} series={series3} type="area" />
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
-            <p className="text-center dark:text-white">Token Burn</p>
+            <p className="text-center text-black dark:text-white">Token Burn</p>
             <Chart options={options4} series={series4} type="area" />
           </div>
         </div>
