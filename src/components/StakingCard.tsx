@@ -23,7 +23,7 @@ const StakingCards = () => {
             </div>
           </div>
           <div className="items-center justify-center">
-            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-100  dark:border-gray-700 dark:hover:bg-gray-700">
+            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
               <div className="flex items-center">
                 <div className="flex items-center">
                   <Image
@@ -57,7 +57,7 @@ const StakingCards = () => {
                 </div>
               </div>
             </div>
-            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-100  dark:border-gray-700 dark:hover:bg-gray-700">
+            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
               <div className="flex items-center">
                 <div className="flex items-center">
                   <Image
@@ -91,7 +91,7 @@ const StakingCards = () => {
                 </div>
               </div>
             </div>
-            <div className="block mt-5 p-2  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-100  dark:border-gray-700 dark:hover:bg-gray-700">
+            <div className="block mt-5 p-2  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
               <div className="flex items-center">
                 <div className="flex items-center">
                   <Image
