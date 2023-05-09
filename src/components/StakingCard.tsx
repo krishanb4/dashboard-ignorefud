@@ -53,7 +53,7 @@ const StakingCards = () => {
             {stakingCards.map((card, index) => (
               <div
                 key={index}
-                className={`p-2 mt-5 border bg-[#115657]  border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700 `}
+                className={`p-2 mt-5 border bg-[#115657]  border-gray-200 rounded-[1.5rem] shadow dark:border-gray-700 `}
               >
                 <div className={`grid grid-cols-5`}>
                   <div className="flex items-center col-span-1">
@@ -88,16 +88,27 @@ const StakingCards = () => {
                     <button
                       onClick={
                         expandCard
-                          ? () => setExpandCard(0)
+                          ? () =>
+                              setExpandCard(expandCard == card.id ? 0 : card.id)
                           : () => setExpandCard(card.id)
                       }
                     >
-                      <Image
-                        src="/images/down-arrow.svg"
-                        alt=""
-                        width={20}
-                        height={20}
-                      />
+                      {expandCard == card.id ? (
+                        <Image
+                          src="/images/up-arrow.svg"
+                          alt=""
+                          width={20}
+                          height={20}
+                        />
+                      ) : (
+                        <Image
+                          src="/images/down-arrow.svg"
+                          alt=""
+                          className="transform rotate-360"
+                          width={20}
+                          height={20}
+                        />
+                      )}
                     </button>
                   </div>
                 </div>
