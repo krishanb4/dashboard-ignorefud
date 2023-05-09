@@ -30,14 +30,14 @@ const StakingCards = () => {
     <>
       <div className="mx-auto flex justify-center text-center max-w-[840px]">
         <div className="w-full text-black dark:text-white m-3 ">
-          <div className="grid grid-cols-5  items-center  mt-4">
+          <div className="grid-cols-5 hidden md:grid  items-center  mt-4">
             <div className="justify-normal">
               <span className="font-medium text-black justify-start dark:text-white flex-none ml-[20px]">
                 Token
               </span>
             </div>
 
-            <div className="flex flex-1 col-span-2 justify-center space-x-4">
+            <div className="flex flex-1 col-span-2 justify-center space-x-4 ml-5">
               <span className="px-4 py-2 text-black dark:text-white flex justify-center">
                 TVL
               </span>
@@ -67,14 +67,15 @@ const StakingCards = () => {
                       {card.name}
                     </span>
                   </div>
+
                   <div className="flex justify-center col-span-2 space-x-4">
-                    <span className="px-4 py-2 text-white flex justify-center">
+                    <span className="px-4 py-2 text-white hidden md:flex col-span-2 justify-center">
                       ${card.tvl}
                     </span>
-                    <span className="px-4 py-2 text-white flex justify-center">
+                    <span className="px-4 py-2 text-white hidden md:flex col-span-2 justify-center">
                       {card.apr}%
                     </span>
-                    <span className="px-4 py-2 text-white flex justify-center">
+                    <span className="px-4 py-2 text-white hidden md:flex col-span-2 justify-center">
                       ${card.earned}
                     </span>
                   </div>
@@ -101,6 +102,34 @@ const StakingCards = () => {
                   </div>
                 </div>
                 {expandCard == card.id ? (
+                  ""
+                ) : (
+                  <div>
+                    <div className="grid  justify-center gap-4 grid-cols-3 space-x-4">
+                      <span className="px-4 py-2 text-black dark:text-white md:hidden flex justify-center">
+                        TVL
+                      </span>
+                      <span className="px-4 py-2 text-black dark:text-white flex md:hidden justify-center">
+                        APR
+                      </span>
+                      <span className="px-4 py-2 text-black dark:text-white flex md:hidden justify-center">
+                        Earned
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 justify-center space-x-4">
+                      <span className="px-4 py-2 text-white flex md:hidden  justify-center">
+                        ${card.tvl}
+                      </span>
+                      <span className="px-4 py-2 text-white flex md:hidden  justify-center">
+                        {card.apr}%
+                      </span>
+                      <span className="px-4 py-2 text-white flex md:hidden justify-center">
+                        ${card.earned}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {expandCard == card.id ? (
                   <div className="border-b border-[#1e6365] my-4"></div>
                 ) : (
                   ""
@@ -110,7 +139,8 @@ const StakingCards = () => {
                     <div className="col-1">
                       <div className="text-[#669ca0]">Your deposit</div>
                       <div className="text-white text-[3rem]">
-                        400k<span className="text-sm">($4000)</span>
+                        400k
+                        <span className="text-sm grid">($4000)</span>
                       </div>
                     </div>
                     <div className="col-1">
@@ -128,29 +158,59 @@ const StakingCards = () => {
                   ""
                 )}
                 {expandCard == card.id ? (
-                  <div className="grid grid-cols-3 mt-[20px]">
-                    <div className="col-1">
-                      <div className="text-[#669ca0]">
-                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
-                          Deposit
-                        </button>
-                        <button className="bg-gradient-to-br from-green-400 ml-1 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
-                          -
-                        </button>
+                  <div>
+                    <div className="grid-cols-3 hidden md:grid mt-[20px]">
+                      <div className="col-1">
+                        <div className="text-[#669ca0]">
+                          <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                            Deposit
+                          </button>
+                          <button className="bg-gradient-to-br from-green-400 ml-1 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                            -
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-1">
+                        <div className="text-[#669ca0] mt-[20px]">
+                          <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                            Token Address
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-1">
+                        <div className="text-[#669ca0] mt-[20px]">
+                          <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                            Contract Address
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="col-1">
-                      <div className="text-[#669ca0] mt-[20px]">
-                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
-                          Token Address
-                        </button>
+                    <div className="md:hidden mt-[20px] ">
+                      <div className="col-1">
+                        <div className="text-[#669ca0]">
+                          <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                            Deposit
+                          </button>
+                          <button className="bg-gradient-to-br from-green-400 ml-1 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                            -
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-1">
-                      <div className="text-[#669ca0] mt-[20px]">
-                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
-                          Contract Address
-                        </button>
+                      <div className="grid grid-cols-2">
+                        <div className="col-1">
+                          <div className="text-[#669ca0] mt-[20px]">
+                            <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                              Token Address
+                            </button>
+                          </div>
+                        </div>
+                        <div className="col-1">
+                          <div className="text-[#669ca0] mt-[20px]">
+                            <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                              Contract Address
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
