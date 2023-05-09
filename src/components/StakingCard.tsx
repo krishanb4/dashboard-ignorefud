@@ -1,130 +1,164 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 const StakingCards = () => {
+  const [expandCard, setExpandCard] = useState(0);
+  const stakingCards = [
+    {
+      id: 1,
+      name: "4token (No Lock)",
+      tvl: 300,
+      apr: 30,
+      earned: 150,
+    },
+    {
+      id: 2,
+      name: "4token (15D Lock)",
+      tvl: 300,
+      apr: 30,
+      earned: 150,
+    },
+    {
+      id: 3,
+      name: "4token (1Y Lock)",
+      tvl: 300,
+      apr: 30,
+      earned: 150,
+    },
+  ];
   return (
     <>
       <div className="mx-auto flex justify-center text-center max-w-[840px]">
         <div className="w-full text-black dark:text-white m-3 ">
-          <div className="flex items-center  mt-4 ">
-            <span className="font-medium text-black dark:text-white flex-none ml-[20px]">
-              Token
-            </span>
-            <div className="flex flex-1 ml-[60px] justify-center space-x-4">
-              <span className="px-4 py-2 text-black dark:text-white   flex justify-center">
+          <div className="grid grid-cols-5  items-center  mt-4">
+            <div className="justify-normal">
+              <span className="font-medium text-black justify-start dark:text-white flex-none ml-[20px]">
+                Token
+              </span>
+            </div>
+
+            <div className="flex flex-1 col-span-2 justify-center space-x-4">
+              <span className="px-4 py-2 text-black dark:text-white flex justify-center">
                 TVL
               </span>
-              <span className="px-4 py-2 text-black dark:text-white    flex justify-center">
+              <span className="px-4 py-2 text-black dark:text-white flex justify-center">
                 APR
               </span>
-              <span className="px-4 py-2 text-black dark:text-white   flex justify-center">
+              <span className="px-4 py-2 text-black dark:text-white flex justify-center">
                 Earned
               </span>
             </div>
           </div>
           <div className="items-center justify-center">
-            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  <Image
-                    src="/images/4logo.png"
-                    alt=""
-                    width={30}
-                    height={30}
-                  />
-                  <span className="font-medium text-white flex-none">
-                    4token (No Lock)
-                  </span>
+            {stakingCards.map((card, index) => (
+              <div
+                key={index}
+                className={`p-2 mt-5 border bg-[#115657]  border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700 `}
+              >
+                <div className={`grid grid-cols-5`}>
+                  <div className="flex items-center col-span-1">
+                    <Image
+                      src="/images/4logo.png"
+                      alt=""
+                      width={30}
+                      height={30}
+                    />
+                    <span className="font-medium text-white flex-none ml-[10px]">
+                      {card.name}
+                    </span>
+                  </div>
+                  <div className="flex justify-center col-span-2 space-x-4">
+                    <span className="px-4 py-2 text-white flex justify-center">
+                      ${card.tvl}
+                    </span>
+                    <span className="px-4 py-2 text-white flex justify-center">
+                      {card.apr}%
+                    </span>
+                    <span className="px-4 py-2 text-white flex justify-center">
+                      ${card.earned}
+                    </span>
+                  </div>
+                  <div className="flex justify-center col-1">
+                    <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pt-0 pl-5 pr-5 rounded-[1rem]">
+                      Claim
+                    </button>
+                  </div>
+                  <div className="flex items-center col-span-1 justify-end p-4">
+                    <button
+                      onClick={
+                        expandCard
+                          ? () => setExpandCard(0)
+                          : () => setExpandCard(card.id)
+                      }
+                    >
+                      <Image
+                        src="/images/down-arrow.svg"
+                        alt=""
+                        width={20}
+                        height={20}
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex flex-1 justify-center space-x-4">
-                  <span className="px-4 py-2 text-white  mt-5flex justify-center">
-                    $536k
-                  </span>
-                  <span className="px-4 py-2 text-white    flex justify-center">
-                    38%
-                  </span>
-                  <span className="px-4 py-2 text-white   flex justify-center">
-                    $150
-                  </span>
-                </div>
-                <div className="flex items-center  mr-4">
-                  <Image
-                    src="/images/down-arrow.svg"
-                    alt=""
-                    width={20}
-                    height={20}
-                  />
-                </div>
+                {expandCard == card.id ? (
+                  <div className="border-b border-[#1e6365] my-4"></div>
+                ) : (
+                  ""
+                )}
+                {expandCard == card.id ? (
+                  <div className="grid grid-cols-3 ">
+                    <div className="col-1">
+                      <div className="text-[#669ca0]">Your deposit</div>
+                      <div className="text-white text-[3rem]">
+                        400k<span className="text-sm">($4000)</span>
+                      </div>
+                    </div>
+                    <div className="col-1">
+                      <div className="text-[#669ca0]">APR%</div>
+                      <div className="text-white text-[3rem]">30%</div>
+                    </div>
+                    <div className="col-1">
+                      <div className="text-[#669ca0]">Earning</div>
+                      <div className="text-green-400 text-[3rem] text-gradient-to-b">
+                        $150
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {expandCard == card.id ? (
+                  <div className="grid grid-cols-3 mt-[20px]">
+                    <div className="col-1">
+                      <div className="text-[#669ca0]">
+                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                          Deposit
+                        </button>
+                        <button className="bg-gradient-to-br from-green-400 ml-1 to-yellow-300 text-black text-sm p-3 pl-5 pr-5 rounded-[1rem]">
+                          -
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-1">
+                      <div className="text-[#669ca0] mt-[20px]">
+                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                          Token Address
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-1">
+                      <div className="text-[#669ca0] mt-[20px]">
+                        <button className="bg-gradient-to-br from-green-400 to-yellow-300 text-black text-sm pl-5 pr-5 rounded-[1rem]">
+                          Contract Address
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
-            </div>
-            <div className="block p-2 mt-5  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  <Image
-                    src="/images/4logo.png"
-                    alt=""
-                    width={30}
-                    height={30}
-                  />
-                  <span className="font-medium text-white flex-none">
-                    4token (15D Lock)
-                  </span>
-                </div>
-                <div className="flex flex-1 justify-center space-x-4 -ml-[10px]">
-                  <span className="px-4 py-2 text-white   flex justify-center">
-                    $536k
-                  </span>
-                  <span className="px-4 py-2 text-white    flex justify-center">
-                    38%
-                  </span>
-                  <span className="px-4 py-2 text-white   flex justify-center">
-                    $150
-                  </span>
-                </div>
-                <div className="flex items-center  mr-4">
-                  <Image
-                    src="/images/down-arrow.svg"
-                    alt=""
-                    width={20}
-                    height={20}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="block mt-5 p-2  border bg-[#115657] border-gray-200 rounded-[1.5rem] shadow hover:bg-gray-700  dark:border-gray-700 dark:hover:bg-gray-700">
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  <Image
-                    src="/images/4logo.png"
-                    alt=""
-                    width={30}
-                    height={30}
-                  />
-                  <span className="font-medium text-white flex-none">
-                    4token (1Y Lock)
-                  </span>
-                </div>
-                <div className="flex flex-1 justify-center space-x-4">
-                  <span className="px-4 py-2 text-white   flex justify-center">
-                    $536k
-                  </span>
-                  <span className="px-4 py-2 text-white    flex justify-center">
-                    38%
-                  </span>
-                  <span className="px-4 py-2 text-white   flex justify-center">
-                    $150
-                  </span>
-                </div>
-                <div className="flex items-center mr-4">
-                  <Image
-                    src="/images/down-arrow.svg"
-                    alt=""
-                    width={20}
-                    height={20}
-                  />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
