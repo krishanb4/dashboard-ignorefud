@@ -23,6 +23,7 @@ const ExampleCharts = () => {
   const [isLoadingPrices, setLoadingPrices] = useState(true);
   const [archerswapPrice, setArcherswapPrice] = useState(0);
   const [iceCreamswapPrice, setIceCreamswapPrice] = useState(0);
+  const [totalBurn, setTotalBurn] = useState(0);
   useEffect(() => {
     axios
       .post(
@@ -53,6 +54,7 @@ const ExampleCharts = () => {
           setTokenData(response.data["burnData"]["currentSupply"]);
           setTokenBurnData(response.data["burnData"]["manualBurn"]);
           setTokenBurnDataAuto(response.data["burnData"]["autoBurn"]);
+          setTotalBurn(response.data["burnData"]["totalBurn"]);
           const autoBurns = response.data["burnData"]["autoBurns"];
 
           const manualBurns = response.data["burnData"]["manualBurns"];
@@ -88,6 +90,9 @@ const ExampleCharts = () => {
     tooltip: {
       theme: "dark",
     },
+    dataLabels: {
+      enabled: false,
+    },
     xaxis: {
       categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       labels: {
@@ -98,6 +103,9 @@ const ExampleCharts = () => {
     },
     yaxis: {
       labels: {
+        formatter: function (value: number) {
+          return "$" + value;
+        },
         style: {
           colors: "#34545f",
         },
@@ -105,6 +113,9 @@ const ExampleCharts = () => {
     },
   };
   const options4 = {
+    dataLabels: {
+      enabled: false,
+    },
     tooltip: {
       theme: "dark",
     },
@@ -118,6 +129,23 @@ const ExampleCharts = () => {
     },
     yaxis: {
       labels: {
+        formatter: function formatNumber(value: number) {
+          var val = Math.abs(value);
+          var formattedValue;
+
+          if (val >= 1000000000) {
+            formattedValue = (val / 1000000000).toFixed(1) + " B";
+          } else if (val >= 1000000) {
+            formattedValue = (val / 1000000).toFixed(1) + " M";
+          } else if (val >= 1000) {
+            formattedValue = (val / 1000).toFixed(1) + " K";
+          } else {
+            formattedValue = val.toFixed(0);
+          }
+
+          return formattedValue;
+        },
+
         style: {
           colors: "#34545f",
         },
@@ -173,7 +201,7 @@ const ExampleCharts = () => {
                 <ul>
                   <li>
                     Current Supply :{" "}
-                    {numeral(tokenData).format("0.0a").toUpperCase()}
+                    {numeral(tokenData).format("0.000a").toUpperCase()}
                   </li>
                   <li>
                     Price : $
@@ -232,7 +260,7 @@ const ExampleCharts = () => {
               ) : (
                 <p className="leading-relaxed text-base text-black dark:text-white">
                   {numeral(tokenBurnData + tokenBurnDataAuto)
-                    .format("0.0a")
+                    .format("0.000a")
                     .toUpperCase()}
                 </p>
               )}
@@ -330,11 +358,11 @@ const ExampleCharts = () => {
                 <ul>
                   <li>
                     Manual :{" "}
-                    {numeral(tokenBurnData).format("0.0a").toUpperCase()}
+                    {numeral(tokenBurnData).format("0.000a").toUpperCase()}
                   </li>
                   <li>
                     Auto :{" "}
-                    {numeral(tokenBurnDataAuto).format("0.0a").toUpperCase()}
+                    {numeral(tokenBurnDataAuto).format("0.000a").toUpperCase()}
                   </li>
                 </ul>
               )}

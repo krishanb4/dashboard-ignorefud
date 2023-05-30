@@ -1,10 +1,42 @@
 import { ethers, BigNumber } from "ethers";
 import { getProvider } from "@wagmi/core";
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
-import bridgeABI from "@/config/abi/bridgeABI.json";
+import { usePrepareContractWrite, useContractWrite, useBalance } from "wagmi";
+import bscUSDT from "@/config/abi/bscUSDT.json";
 export interface ApprovalResult {
   txHash: string;
   status: "mined" | "failed";
+}
+
+export interface BalanceResult {
+  balance: any;
+}
+
+export async function getBalance(
+  ContractAddress: string,
+  token: string,
+  chainId: number
+): Promise<BalanceResult> {
+  try {
+    const contract_address = ContractAddress as `0x${string}`;
+    const token_address = token as `0x${string}`;
+    const provider = getProvider({
+      chainId: chainId,
+    });
+    const tokenContract = new ethers.Contract(
+      contract_address,
+      bscUSDT,
+      provider
+    );
+
+    const balance = await tokenContract.balanceOf(token_address);
+
+    return {
+      balance: balance,
+    };
+  } catch (error) {
+    console.error(`Failed to approve tokens: ${error}`);
+    throw error;
+  }
 }
 
 export async function approve(
@@ -32,11 +64,9 @@ export async function approve(
       { gasLimit }
     );
 
-    // Sign and send the approval transaction
     const signedTransaction = await signer.sendTransaction(transaction);
     const transactionReceipt = await signedTransaction.wait();
 
-    // console.log(`Approved ${amount} tokens to spender ${spender}`);
     return {
       txHash: transactionReceipt.transactionHash,
       status: transactionReceipt.status === 1 ? "mined" : "failed",
@@ -79,46 +109,4 @@ export const checkApprovedBalance = async (
     console.error("Failed to check approved balance:", error);
     throw error;
   }
-};
-
-type SwapArgs = {
-  token: string;
-  amountLD: BigNumber;
-  to: string;
-  callParams: {};
-  adapterParams: "0x";
-  gassData: {};
-};
-
-interface BridgeParams {
-  prepareContract: string;
-  args: SwapArgs;
-}
-
-interface UseBridgeReturnType {
-  bridge: any;
-  error: any;
-}
-
-export const useBridge = (
-  prepareContract: string,
-  args: SwapArgs
-): UseBridgeReturnType => {
-  const { config, error } = usePrepareContractWrite({
-    address: ethers.utils.getAddress(prepareContract),
-    abi: bridgeABI,
-    functionName: "bridge",
-    args: Object.values(args),
-  });
-
-  const bridge = async () => {
-    try {
-      const response = config.mode;
-      // console.log(response);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  return { bridge, error };
 };

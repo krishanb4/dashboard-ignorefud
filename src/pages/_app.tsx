@@ -10,10 +10,11 @@ import { chainlist } from "@/config/chains";
 import { Web3Modal } from "@web3modal/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import store from "@/redux/store";
+import store from "../state/index";
 import { Provider } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import { MyContext } from "@/components/context";
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
 const { chains, provider } = configureChains(
@@ -29,13 +30,36 @@ const wagmiClient = createClient({
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+interface MyContextValue {
+  data: string;
+  setData: (data: string) => void;
+}
+
 export default function App({ Component, pageProps }: AppProps) {
+  const [data, setData] = useState("");
+
+  const contextValue: MyContextValue = {
+    data,
+    setData,
+  };
   return (
     <>
-      <WagmiConfig client={wagmiClient}>
-        <Component {...pageProps} />
-      </WagmiConfig>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+      <Provider store={store}>
+        <WagmiConfig client={wagmiClient}>
+          <MyContext.Provider value={contextValue}>
+            <Component {...pageProps} />
+          </MyContext.Provider>
+        </WagmiConfig>
+        <Web3Modal
+          projectId={projectId}
+          ethereumClient={ethereumClient}
+          themeVariables={{
+            "--w3m-accent-color": "#115657",
+            "--w3m-logo-image-url": "/images/logo_name.png",
+            "--w3m-background-color": "#115657",
+          }}
+        />
+      </Provider>
     </>
   );
 }
