@@ -369,50 +369,7 @@ const ExampleCharts = () => {
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
             <p className="text-center text-black dark:text-white">Liquidity</p>
-            <div className="relative inline-block text-left">
-              <div>
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                  id="dropdownButton"
-                >
-                  {liqProvider}
-                </button>
-              </div>
-              <div
-                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden"
-                id="dropdownPanel"
-              >
-                <div
-                  className="py-1"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  <a
-                    onClick={() => setLiqProvider("Archerswap")}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    Archerswap
-                  </a>
-                  <a
-                    onClick={() => setLiqProvider("Icecreamswap")}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    Icecreamswap
-                  </a>
-                  <a
-                    onClick={() => setLiqProvider("Pancakeswap")}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    Pancakeswap
-                  </a>
-                </div>
-              </div>
-            </div>
+
             {isLoading ? (
               <SkeletonTheme baseColor="#e3dede" highlightColor="#a9b7c1">
                 <p>
