@@ -3,8 +3,9 @@ import Header from "@/components/Header";
 import Theme from "@/components/Theme";
 import SelectButtons from "@/components/SelectButtons";
 import StakingCards from "@/components/StakingCard";
-
+import { useFetchPublicData } from "../state/hooks";
 export default function Home() {
+  useFetchPublicData();
   return (
     <>
       <Head>
