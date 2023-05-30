@@ -13,8 +13,12 @@ const ChartCard = ({ children }: { children: React.ReactNode }) => (
 );
 
 const ExampleCharts = () => {
-  const swaps = ["Pancakeswap", "Archerswap", "Icecreamswap"];
-  const [liqProvider, setLiqProvider] = useState("Pancakeswap");
+  const [isDropDown, setIsDropDown] = useState(false);
+  const [selectSwap, setSelectSwap] = useState("Select Swap");
+  function setSwap(swap: string) {
+    setSelectSwap(swap);
+    setIsDropDown(false);
+  }
 
   const {
     tokenData,
@@ -58,12 +62,15 @@ const ExampleCharts = () => {
     },
   };
   const options2 = {
+    dataLabels: {
+      enabled: false,
+    },
     tooltip: {
       theme: "dark",
     },
     xaxis: {
-      categories: lp.archerswapLP
-        ? lp.archerswapLP.map((item) =>
+      categories: lp[selectSwap.toLowerCase() + "Lp"]
+        ? lp[selectSwap.toLowerCase() + "Lp"].map((item) =>
             new Date(item.date).toLocaleDateString()
           )
         : [],
@@ -152,23 +159,21 @@ const ExampleCharts = () => {
   ];
   const series2 = [
     {
-      name: "ArcherSwap LP (CORE)",
-      data: lp.archerswapLP
-        ? lp.archerswapLP.map((item) => item.total_weth_amount)
+      name: "Liquidity (WETH)",
+      data: lp[selectSwap.toLowerCase() + "Lp"]
+        ? lp[selectSwap.toLowerCase() + "Lp"].map(
+            (item) => item.total_weth_amount
+          )
         : [],
     },
-    {
-      name: "IcecreamSwap LP (CORE)",
-      data: lp.icecreamswapLP
-        ? lp.icecreamswapLP.map((item) => item.total_weth_amount)
-        : [],
-    },
-    {
-      name: "PancakeSwap LP (BNB)",
-      data: lp.pancakeswapLp
-        ? lp.pancakeswapLp.map((item) => item.total_weth_amount)
-        : [],
-    },
+    // {
+    //   name: "Liquidity (4TOKEN) K",
+    //   data: lp[selectSwap.toLowerCase() + "Lp"]
+    //     ? lp[selectSwap.toLowerCase() + "Lp"].map(
+    //         (item) => item.total_token_amount / 1000
+    //       )
+    //     : [],
+    // },
   ];
   const series3 = [
     {
@@ -187,13 +192,6 @@ const ExampleCharts = () => {
     },
   ];
 
-  const [isDropDown, setIsDropDown] = useState(false);
-  const [selectSwap, setSelectSwap] = useState("Select Swap");
-  function setSwap(swap: string) {
-    setSelectSwap(swap);
-    setIsDropDown(false);
-    setLiqProvider(swap);
-  }
   return (
     <>
       <div className="flex flex-wrap justify-center mt-10 text-center">
