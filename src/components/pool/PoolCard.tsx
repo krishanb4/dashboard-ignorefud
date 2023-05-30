@@ -13,10 +13,6 @@ export interface PoolsWithStakedValue extends Pool {
 
 interface PoolCardProps {
   pool: PoolsWithStakedValue;
-  displayApr: number;
-  removed: boolean;
-  account?: string;
-  originalLiquidity?: BigNumber;
 }
 
 const PoolCard: React.FC<React.PropsWithChildren<PoolCardProps>> = ({

@@ -1,1 +1,1 @@
-export { fetchPoolsPublicDataAsync } from "./pools";
+export { fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from "./pools";
