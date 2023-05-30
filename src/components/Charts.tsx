@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-import axios from "axios";
 import numeral from "numeral";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import useCharts from "@/hooks/useCharts";
 
 const ChartCard = ({ children }: { children: React.ReactNode }) => (
   <div className="border-2 border-gray-300 rounded-lg m-10 bg-[#f0ffff]">
@@ -13,76 +13,23 @@ const ChartCard = ({ children }: { children: React.ReactNode }) => (
 );
 
 const ExampleCharts = () => {
-  const [tokenData, setTokenData] = useState(0);
-  const [tokenBurnData, setTokenBurnData] = useState(0);
-  const [tokenBurnDataAuto, setTokenBurnDataAuto] = useState(0);
-  const [dataCategories, setDataCategories] = useState<string[]>([]);
-  const [autoburnData, setautoburnData] = useState([]);
-  const [manualBurnDatanew, setmanualBurnData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [isLoadingPrices, setLoadingPrices] = useState(true);
-  const [archerswapPrice, setArcherswapPrice] = useState(0);
-  const [iceCreamswapPrice, setIceCreamswapPrice] = useState(0);
-  useEffect(() => {
-    axios
-      .post(
-        "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/prices"
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setLoadingPrices(false);
-        }
-        setArcherswapPrice(response.data["prices"]["archerswapPrice"]);
-        setIceCreamswapPrice(response.data["prices"]["icecreameswapPrice"]);
-      })
-      .catch((error) => {
-        console.error(error); // handle error
-      });
-  }, []);
+  const swaps = ["Pancakeswap", "Archerswap", "Icecreamswap"];
+  const [liqProvider, setLiqProvider] = useState("Pancakeswap");
 
-  useEffect(() => {
-    function getTokenData() {
-      axios
-        .post(
-          "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/burn"
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            setLoading(false);
-          }
-          setTokenData(response.data["burnData"]["currentSupply"]);
-          setTokenBurnData(response.data["burnData"]["manualBurn"]);
-          setTokenBurnDataAuto(response.data["burnData"]["autoBurn"]);
-          const autoBurns = response.data["burnData"]["autoBurns"];
-
-          const manualBurns = response.data["burnData"]["manualBurns"];
-          const categories = autoBurns.map((item: { date: string }) =>
-            new Date(item.date).toLocaleDateString()
-          );
-          setDataCategories(categories);
-          const autoBurndata = autoBurns.map(
-            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
-          );
-          setautoburnData(autoBurndata);
-          const autoBurnLength = autoBurndata.length;
-          const manualBurnData = manualBurns.map(
-            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
-          );
-          const manualBurnLength = manualBurnData.length;
-          const dataShort = autoBurnLength - manualBurnLength;
-          const lastManualBurnValue = manualBurnData.pop();
-          for (let i = 0; i < dataShort; i++) {
-            manualBurnData.push(lastManualBurnValue);
-          }
-          setmanualBurnData(manualBurnData);
-        })
-        .catch((error) => {
-          console.error(error); // handle error
-        });
-    }
-    getTokenData();
-  }, []);
-  console.log(Object.values(tokenData)[0]);
+  const {
+    tokenData,
+    tokenBurnData,
+    tokenBurnDataAuto,
+    dataCategories,
+    autoburnData,
+    manualBurnData,
+    isLoading,
+    isLoadingPrices,
+    archerswapPrice,
+    iceCreamswapPrice,
+    rewards,
+    lp,
+  } = useCharts();
 
   const options = {
     tooltip: {
@@ -96,6 +43,53 @@ const ExampleCharts = () => {
         },
       },
     },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+  };
+  const options2 = {
+    tooltip: {
+      theme: "dark",
+    },
+    xaxis: {
+      categories: lp.archerswapLP
+        ? lp.archerswapLP.map((item) =>
+            new Date(item.date).toLocaleDateString()
+          )
+        : [],
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+  };
+  const options3 = {
+    tooltip: {
+      theme: "dark",
+    },
+    xaxis: {
+      categories: rewards.map((item) =>
+        new Date(item.date).toLocaleDateString()
+      ),
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+
     yaxis: {
       labels: {
         style: {
@@ -132,20 +126,34 @@ const ExampleCharts = () => {
   ];
   const series2 = [
     {
-      name: "liquidity",
-      data: [30, 40, 25, 50, 49, 21, 70, 51],
+      name: "ArcherSwap LP (CORE)",
+      data: lp.archerswapLP
+        ? lp.archerswapLP.map((item) => item.total_weth_amount)
+        : [],
+    },
+    {
+      name: "IcecreamSwap LP (CORE)",
+      data: lp.icecreamswapLP
+        ? lp.icecreamswapLP.map((item) => item.total_weth_amount)
+        : [],
+    },
+    {
+      name: "PancakeSwap LP (BNB)",
+      data: lp.pancakeswapLp
+        ? lp.pancakeswapLp.map((item) => item.total_weth_amount)
+        : [],
     },
   ];
   const series3 = [
     {
-      name: "usdt-rewards",
-      data: [30, 40, 25, 50, 49, 21, 70, 51],
+      name: "Rewards (USDT)",
+      data: rewards.map((item) => item.cumulative_sum),
     },
   ];
   const series4 = [
     {
       name: "manual-burn",
-      data: manualBurnDatanew,
+      data: manualBurnData,
     },
     {
       name: "auto-burn",
@@ -256,7 +264,7 @@ const ExampleCharts = () => {
                 </SkeletonTheme>
               ) : (
                 <p className="leading-relaxed text-base text-black dark:text-white">
-                  $1M
+                  {rewards[rewards.length - 1].cumulative_sum.toFixed(2)} $
                 </p>
               )}
             </div>
@@ -361,6 +369,50 @@ const ExampleCharts = () => {
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
             <p className="text-center text-black dark:text-white">Liquidity</p>
+            <div className="relative inline-block text-left">
+              <div>
+                <button
+                  type="button"
+                  className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                  id="dropdownButton"
+                >
+                  {liqProvider}
+                </button>
+              </div>
+              <div
+                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden"
+                id="dropdownPanel"
+              >
+                <div
+                  className="py-1"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="options-menu"
+                >
+                  <a
+                    onClick={() => setLiqProvider("Archerswap")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Archerswap
+                  </a>
+                  <a
+                    onClick={() => setLiqProvider("Icecreamswap")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Icecreamswap
+                  </a>
+                  <a
+                    onClick={() => setLiqProvider("Pancakeswap")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Pancakeswap
+                  </a>
+                </div>
+              </div>
+            </div>
             {isLoading ? (
               <SkeletonTheme baseColor="#e3dede" highlightColor="#a9b7c1">
                 <p>
@@ -368,7 +420,7 @@ const ExampleCharts = () => {
                 </p>
               </SkeletonTheme>
             ) : (
-              <Chart options={options} series={series2} type="area" />
+              <Chart options={options2} series={series2} type="scatter" />
             )}
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
@@ -382,7 +434,7 @@ const ExampleCharts = () => {
                 </p>
               </SkeletonTheme>
             ) : (
-              <Chart options={options} series={series3} type="area" />
+              <Chart options={options3} series={series3} type="area" />
             )}
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
