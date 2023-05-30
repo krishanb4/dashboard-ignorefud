@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-import axios from "axios";
 import numeral from "numeral";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import useCharts from "@/hooks/useCharts";
 
 const ChartCard = ({ children }: { children: React.ReactNode }) => (
   <div className="border-2 border-gray-300 rounded-lg m-10 bg-[#f0ffff]">
@@ -13,78 +13,25 @@ const ChartCard = ({ children }: { children: React.ReactNode }) => (
 );
 
 const ExampleCharts = () => {
-  const [tokenData, setTokenData] = useState(0);
-  const [tokenBurnData, setTokenBurnData] = useState(0);
-  const [tokenBurnDataAuto, setTokenBurnDataAuto] = useState(0);
-  const [dataCategories, setDataCategories] = useState<string[]>([]);
-  const [autoburnData, setautoburnData] = useState([]);
-  const [manualBurnDatanew, setmanualBurnData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [isLoadingPrices, setLoadingPrices] = useState(true);
-  const [archerswapPrice, setArcherswapPrice] = useState(0);
-  const [iceCreamswapPrice, setIceCreamswapPrice] = useState(0);
-  const [totalBurn, setTotalBurn] = useState(0);
-  useEffect(() => {
-    axios
-      .post(
-        "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/prices"
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setLoadingPrices(false);
-        }
-        setArcherswapPrice(response.data["prices"]["archerswapPrice"]);
-        setIceCreamswapPrice(response.data["prices"]["icecreameswapPrice"]);
-      })
-      .catch((error) => {
-        console.error(error); // handle error
-      });
-  }, []);
 
-  useEffect(() => {
-    function getTokenData() {
-      axios
-        .post(
-          "https://ignorefud-price-tracker-devcresix-krishanb4-s-team.vercel.app/burn"
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            setLoading(false);
-          }
-          setTokenData(response.data["burnData"]["currentSupply"]);
-          setTokenBurnData(response.data["burnData"]["manualBurn"]);
-          setTokenBurnDataAuto(response.data["burnData"]["autoBurn"]);
-          setTotalBurn(response.data["burnData"]["totalBurn"]);
-          const autoBurns = response.data["burnData"]["autoBurns"];
+  const swaps = ["Pancakeswap", "Archerswap", "Icecreamswap"];
+  const [liqProvider, setLiqProvider] = useState("Pancakeswap");
 
-          const manualBurns = response.data["burnData"]["manualBurns"];
-          const categories = autoBurns.map((item: { date: string }) =>
-            new Date(item.date).toLocaleDateString()
-          );
-          setDataCategories(categories);
-          const autoBurndata = autoBurns.map(
-            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
-          );
-          setautoburnData(autoBurndata);
-          const autoBurnLength = autoBurndata.length;
-          const manualBurnData = manualBurns.map(
-            (item: { cumulative_sum: number }) => item.cumulative_sum.toFixed(0)
-          );
-          const manualBurnLength = manualBurnData.length;
-          const dataShort = autoBurnLength - manualBurnLength;
-          const lastManualBurnValue = manualBurnData.pop();
-          for (let i = 0; i < dataShort; i++) {
-            manualBurnData.push(lastManualBurnValue);
-          }
-          setmanualBurnData(manualBurnData);
-        })
-        .catch((error) => {
-          console.error(error); // handle error
-        });
-    }
-    getTokenData();
-  }, []);
-  console.log(Object.values(tokenData)[0]);
+  const {
+    tokenData,
+    tokenBurnData,
+    tokenBurnDataAuto,
+    dataCategories,
+    autoburnData,
+    manualBurnData,
+    isLoading,
+    isLoadingPrices,
+    archerswapPrice,
+    iceCreamswapPrice,
+    rewards,
+    lp,
+  } = useCharts();
+
 
   const options = {
     tooltip: {
@@ -106,6 +53,53 @@ const ExampleCharts = () => {
         formatter: function (value: number) {
           return "$" + value;
         },
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+  };
+  const options2 = {
+    tooltip: {
+      theme: "dark",
+    },
+    xaxis: {
+      categories: lp.archerswapLP
+        ? lp.archerswapLP.map((item) =>
+            new Date(item.date).toLocaleDateString()
+          )
+        : [],
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+  };
+  const options3 = {
+    tooltip: {
+      theme: "dark",
+    },
+    xaxis: {
+      categories: rewards.map((item) =>
+        new Date(item.date).toLocaleDateString()
+      ),
+      labels: {
+        style: {
+          colors: "#34545f",
+        },
+      },
+    },
+
+    yaxis: {
+      labels: {
         style: {
           colors: "#34545f",
         },
@@ -160,20 +154,34 @@ const ExampleCharts = () => {
   ];
   const series2 = [
     {
-      name: "liquidity",
-      data: [30, 40, 25, 50, 49, 21, 70, 51],
+      name: "ArcherSwap LP (CORE)",
+      data: lp.archerswapLP
+        ? lp.archerswapLP.map((item) => item.total_weth_amount)
+        : [],
+    },
+    {
+      name: "IcecreamSwap LP (CORE)",
+      data: lp.icecreamswapLP
+        ? lp.icecreamswapLP.map((item) => item.total_weth_amount)
+        : [],
+    },
+    {
+      name: "PancakeSwap LP (BNB)",
+      data: lp.pancakeswapLp
+        ? lp.pancakeswapLp.map((item) => item.total_weth_amount)
+        : [],
     },
   ];
   const series3 = [
     {
-      name: "usdt-rewards",
-      data: [30, 40, 25, 50, 49, 21, 70, 51],
+      name: "Rewards (USDT)",
+      data: rewards.map((item) => item.cumulative_sum),
     },
   ];
   const series4 = [
     {
       name: "manual-burn",
-      data: manualBurnDatanew,
+      data: manualBurnData,
     },
     {
       name: "auto-burn",
@@ -284,7 +292,7 @@ const ExampleCharts = () => {
                 </SkeletonTheme>
               ) : (
                 <p className="leading-relaxed text-base text-black dark:text-white">
-                  $1M
+                  {rewards[rewards.length - 1].cumulative_sum.toFixed(2)} $
                 </p>
               )}
             </div>
@@ -389,6 +397,7 @@ const ExampleCharts = () => {
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
             <p className="text-center text-black dark:text-white">Liquidity</p>
+
             {isLoading ? (
               <SkeletonTheme baseColor="#e3dede" highlightColor="#a9b7c1">
                 <p>
@@ -396,7 +405,7 @@ const ExampleCharts = () => {
                 </p>
               </SkeletonTheme>
             ) : (
-              <Chart options={options} series={series2} type="area" />
+              <Chart options={options2} series={series2} type="scatter" />
             )}
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
@@ -410,7 +419,7 @@ const ExampleCharts = () => {
                 </p>
               </SkeletonTheme>
             ) : (
-              <Chart options={options} series={series3} type="area" />
+              <Chart options={options3} series={series3} type="area" />
             )}
           </div>
           <div className="border-2 dark:border-black border-gray-300 rounded-lg m-10 dark:bg-slate-900 bg-[#f0ffff] chart-container">
