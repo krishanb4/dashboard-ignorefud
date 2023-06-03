@@ -31,9 +31,7 @@ type LP = {
 };
 
 type LPData = {
-  archerswapLP: LP[];
-  icecreamswapLP: LP[];
-  pancakeswapLp: LP[];
+  [key: string]: LP[];
 };
 
 export default function useCharts(): ChartData {
@@ -125,28 +123,7 @@ export default function useCharts(): ChartData {
       .get("https://api.4ignorefud.com/lp")
       .then((response) => {
         const data = response.data["lps"];
-        // Collect all unique dates from all objects
-        let allDates: string[] = [
-          ...new Set<string>(
-            Object.values(data)
-              .reduce((acc: LP[], cur: LP[]) => [...acc, ...cur], [])
-              .map((item: LP) => item.date)
-          ),
-        ];
 
-        // Update each LP data array with missing dates (total_value set to 0)
-        for (let lp in data) {
-          allDates.forEach((date) => {
-            if (!data[lp].some((e) => e.date === date)) {
-              data[lp].push({ date, total_weth_amount: 0 });
-            }
-          });
-          // Optional: Sort the data arrays by date
-          data[lp].sort(
-            (a: LP, b: LP) =>
-              new Date(a.date).getTime() - new Date(b.date).getTime()
-          );
-        }
         setLP(data);
       })
       .catch((error) => {
