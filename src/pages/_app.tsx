@@ -15,10 +15,11 @@ import { Provider } from "react-redux";
 import { useEffect, useState } from "react";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MyContext } from "@/components/context";
+import { mainnet, bsc } from "wagmi/chains";
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
 const { chains, provider } = configureChains(
-  [chainlist.coreDAO, chainlist.bscChain],
+  [bsc],
   [w3mProvider({ projectId })]
 );
 
@@ -48,6 +49,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <WagmiConfig client={wagmiClient}>
           <MyContext.Provider value={contextValue}>
             <Component {...pageProps} />
+            <ToastContainer />
           </MyContext.Provider>
         </WagmiConfig>
         <Web3Modal

@@ -1,14 +1,11 @@
-import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import PoolCard from "./pool/PoolCard";
-import pools from "@/config/constants/pools";
-import { useSigner } from "wagmi";
-import { MyContext } from "@/components/context";
+import { useAccount } from "wagmi";
 import { usePools } from "@/state/hooks";
 
 const StakingCards = () => {
-  const poolsFrom = usePools();
-  console.log(poolsFrom);
+  const { address } = useAccount();
+  const poolsFrom = usePools(address);
 
   return (
     <>

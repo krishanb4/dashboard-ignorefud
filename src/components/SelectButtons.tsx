@@ -3,7 +3,7 @@ import Charts from "./Charts";
 import StakingCards from "./StakingCard";
 
 const SelectButtons: React.FC = () => {
-  const [selectedButton, setSelectButton] = useState("Dashboard");
+  const [selectedButton, setSelectButton] = useState("Staking");
   const SelectButton = [
     { name: "Dashboard" },
     { name: "Staking" },

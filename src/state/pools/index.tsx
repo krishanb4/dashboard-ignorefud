@@ -2,8 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import PoolConfig from "../../config/constants/pools";
 import { PoolsState, Pool } from "../types";
 import fetchPools from "./fetchPools";
-import { fetchFarmUserAllowances } from "./fetchPoolUser";
-import { useSigner, useNetwork } from "wagmi";
 
 const initialState: PoolsState = { data: [...PoolConfig] };
 export const farmsSlice = createSlice({
@@ -36,30 +34,24 @@ export const fetchPoolsPublicDataAsync = () => async (dispatch: any) => {
 
 export const fetchPoolsUserDataAsync =
   (account: string) => async (dispatch: any) => {
-    const userFarmAllowances = await fetchFarmUserAllowances(account);
-    // const userFarmTokenBalances = await fetchFarmUserTokenBalancesBHC(account);
-    // const userStakedBalances = await fetchFarmUserStakedBalancesBHC(account);
-    // const userFarmEarnings = await fetchFarmUserEarningsBHC(account);
-    // const userFarmDualEarnings = await fetchFarmUserEarningsBHCDual(account);
-    // const userConstraintBalances = await fetchFarmUserConstraintBalancesBHC(
-    //   account
+    // const userPoolmAllowances = await fetchPoolUserAllowances(account);
+    // const userPoolTokenBalances = await fetchPoolUserTokenBalances(account);
+    // const userFarmEarnings = await fetchPoolUserEarn(account);
+    // const userPoolStaked = await fetchPoolUserStakedBalances(account);
+    // const arrayOfUserDataObjects = userPoolmAllowances?.map(
+    //   (farmAllowance, index) => {
+    //     return {
+    //       index,
+    //       allowance: userPoolmAllowances?.[index] ?? 0,
+    //       tokenBalance: userPoolTokenBalances?.[index] ?? 0,
+    //       stakedBalance: userPoolStaked?.[index] ?? 0,
+    //       earnings: userFarmEarnings?.[index],
+    //       // dualEarnings: userFarmDualEarnings[index],
+    //       // constraintBalances: userConstraintBalances[index],
+    //     };
+    //   }
     // );
-
-    const arrayOfUserDataObjects = userFarmAllowances.map(
-      (farmAllowance, index) => {
-        return {
-          index,
-          allowance: userFarmAllowances[index],
-          // tokenBalance: userFarmTokenBalances[index],
-          // stakedBalance: userStakedBalances[index],
-          // earnings: userFarmEarnings[index],
-          // dualEarnings: userFarmDualEarnings[index],
-          // constraintBalances: userConstraintBalances[index],
-        };
-      }
-    );
-
-    dispatch(setPoolsUserData({ arrayOfUserDataObjects }));
+    // dispatch(setPoolsUserData({ arrayOfUserDataObjects }));
   };
 
 export const { setPoolsPublicData, setPoolsUserData } = farmsSlice.actions;

@@ -3,7 +3,6 @@ import { fetchPoolsPublicDataAsync } from "./actions";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Pool, State } from "./types";
-import { BigNumber } from "ethers";
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch();
@@ -15,39 +14,56 @@ export const useFetchPublicData = () => {
   }, [dispatch]);
 };
 
-export const usePools = (): Pool[] => {
-  const farms = useSelector((state: State) => state.pools.data);
-  return farms;
+export const usePools = (account: any): Pool[] => {
+  // const dispatch = useAppDispatch();
+  // useEffect(() => {
+  //   if (account) {
+  //     dispatch(fetchPoolsUserDataAsync(account));
+  //   }
+  //   const interval = setInterval(() => {
+  //     if (account) {
+  //       dispatch(fetchPoolsUserDataAsync(account));
+  //     }
+  //   }, 10000);
+  //   return () => clearInterval(interval); // 10000 milliseconds = 10 seconds
+  // }, [account, dispatch]);
+  const pool = useSelector((state: State) => state.pools.data);
+  return pool;
 };
 
-export const useFarmFromPid = (pid: number): Pool => {
-  const farm = useSelector((state: State) =>
+export const usePoolFromPid = (pid: number): Pool | undefined => {
+  const pool = useSelector((state: State) =>
     state.pools.data.find((f) => f.poolId === pid)
   );
-  return farm;
+  return pool;
 };
 
-export const useFarmUser = (pid) => {
-  const farm = useFarmFromPid(pid);
-
-  return {
-    allowance: farm.userData
-      ? new BigNumber(farm.userData.allowance)
-      : new BigNumber(0),
-    tokenBalance: farm.userData
-      ? new BigNumber(farm.userData.tokenBalance)
-      : new BigNumber(0),
-    stakedBalance: farm.userData
-      ? new BigNumber(farm.userData.stakedBalance)
-      : new BigNumber(0),
-    earnings: farm.userData
-      ? new BigNumber(farm.userData.earnings)
-      : new BigNumber(0),
-    dualEarnings: farm.userData
-      ? farm.userData.dualEarnings
-      : [new BigNumber(0), new BigNumber(0), new BigNumber(0)],
-    constraintBalances: farm.userData
-      ? farm.userData.constraintBalances
-      : [new BigNumber(0), new BigNumber(0)],
-  };
+export const usePoolUser = (pid: number) => {
+  // const pool = usePoolFromPid(pid);
+  // const allowance = pool?.userData?.allowance;
+  // const tokenBalance = pool?.userData?.tokenBalance;
+  // const earning = pool?.userData?.earnings;
+  // const stakedBalance = pool?.userData?.stakedBalance;
+  // return {
+  //   allowance: allowance ?? new BigNumber(0),
+  //   tokenBalance: tokenBalance ?? new BigNumber(0),
+  //   earnings: earning ?? new BigNumber(0),
+  //   stakedBalance: stakedBalance ?? new BigNumber(0),
+  //   // tokenBalance:
+  //   //   pool?.userData && typeof pool.userData.tokenBalance !== "undefined"
+  //   //     ? new BigNumber(await pool.userData.tokenBalance.toString())
+  //   //     : new BigNumber(0),
+  //   //stakedBalance: farm.userData
+  //   //   ? new BigNumber(farm.userData.stakedBalance)
+  //   //   : new BigNumber(0),
+  //   // earnings: farm.userData
+  //   //   ? new BigNumber(farm.userData.earnings)
+  //   //   : new BigNumber(0),
+  //   // dualEarnings: farm.userData
+  //   //   ? farm.userData.dualEarnings
+  //   //   : [new BigNumber(0), new BigNumber(0), new BigNumber(0)],
+  //   // constraintBalances: farm.userData
+  //   //   ? farm.userData.constraintBalances
+  //   //   : [new BigNumber(0), new BigNumber(0)],
+  // };
 };

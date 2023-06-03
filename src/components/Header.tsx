@@ -1,10 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import { useState, useEffect, useRef } from "react";
-
 import { Web3Button } from "@web3modal/react";
-import { useNetwork, useSwitchNetwork } from "wagmi";
 
 const Header: React.FC = () => {
   return (

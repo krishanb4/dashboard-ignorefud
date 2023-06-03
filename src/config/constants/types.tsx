@@ -28,6 +28,7 @@ export interface PoolConfig {
   poolCategory: PoolCategory;
   sortOrder?: number;
   harvest?: boolean;
+  isLp: boolean;
   isFinished?: boolean;
   enableEmergencyWithdraw?: boolean;
 }
