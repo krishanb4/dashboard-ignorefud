@@ -13,6 +13,10 @@ type ChartData = {
   isLoadingPrices: boolean;
   archerswapPrice: number;
   iceCreamswapPrice: number;
+  pancakeswapPrice: number;
+  archerswapLPPrice: number;
+  iceCreamswapLPPrice: number;
+  pancakeswapLPPrice: number;
   lp: LPData;
 };
 
@@ -45,6 +49,10 @@ export default function useCharts(): ChartData {
   const [isLoadingPrices, setLoadingPrices] = useState(true);
   const [archerswapPrice, setArcherswapPrice] = useState(0);
   const [iceCreamswapPrice, setIceCreamswapPrice] = useState(0);
+  const [pancakeswapPrice, setPancakeswapPrice] = useState(0);
+  const [archerswapLPPrice, setArcherswapLPPrice] = useState(0);
+  const [iceCreamswapLPPrice, setIceCreamswapLPPrice] = useState(0);
+  const [pancakeswapLPPrice, setPancakeswapLPPrice] = useState(0);
   const [rewards, setRewards] = useState([] as Rewards[]);
   const [lp, setLP] = useState({} as LPData);
 
@@ -57,6 +65,24 @@ export default function useCharts(): ChartData {
         }
         setArcherswapPrice(response.data["prices"]["archerswapPrice"]);
         setIceCreamswapPrice(response.data["prices"]["icecreameswapPrice"]);
+        setPancakeswapPrice(response.data["prices"]["pancakeswapPrice"]);
+      })
+      .catch((error) => {
+        console.error(error); // handle error
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get("https://api.4ignorefud.com/lp_prices")
+      .then((response) => {
+        if (response.status === 200) {
+          setLoadingPrices(false);
+        }
+        setArcherswapLPPrice(response.data["lp_prices"]["archerswapLPPrice"]);
+        setIceCreamswapLPPrice(
+          response.data["lp_prices"]["icecreameswapLPPrice"]
+        );
+        setPancakeswapLPPrice(response.data["lp_prices"]["pancakeswapLPPrice"]);
       })
       .catch((error) => {
         console.error(error); // handle error
@@ -142,6 +168,10 @@ export default function useCharts(): ChartData {
     isLoadingPrices,
     archerswapPrice,
     iceCreamswapPrice,
+    pancakeswapPrice,
+    archerswapLPPrice,
+    iceCreamswapLPPrice,
+    pancakeswapLPPrice,
     rewards,
     lp,
   };
