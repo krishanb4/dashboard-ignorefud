@@ -31,6 +31,10 @@ const ExampleCharts = () => {
     isLoadingPrices,
     archerswapPrice,
     iceCreamswapPrice,
+    pancakeswapPrice,
+    archerswapLPPrice,
+    iceCreamswapLPPrice,
+    pancakeswapLPPrice,
     rewards,
     lp,
   } = useCharts();
